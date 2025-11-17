@@ -13,32 +13,36 @@ export abstract class AbstractName implements Name {
         throw new Error("needs implementation or deletion");
     }
 
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
-    }
-
     public toString(): string {
         return this.asDataString();
     }
+    
+    abstract asString(delimiter?: string): string;
+    abstract asDataString(): string;
 
-    public asDataString(): string {
-        throw new Error("needs implementation or deletion");
+    public isEmpty(): boolean {
+        return this.getNoComponents() === 0;
     }
 
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
+    protected hashCode(str: string): number {
+        var h: number = 0;
+        for (var i = 0; i < str.length; i++) {
+            h = 31 * h + str.charCodeAt(i);
+            }
+        return h & 0xFFFFFFFF
     }
 
     public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
+        return this.hashCode(this.asDataString());
     }
 
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
+
+    public isEqual(other: Name): boolean {
+        return this.getHashCode() === other.getHashCode();
     }
 
     public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+        return this.delimiter;
     }
 
     abstract getNoComponents(): number;
@@ -50,8 +54,13 @@ export abstract class AbstractName implements Name {
     abstract append(c: string): void;
     abstract remove(i: number): void;
 
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+    public concat(other: Name): Name {
+        let ret = this.clone();
+        let noComponents:number = other.getNoComponents();
+        for (let i = 0; i < noComponents; i++) {
+            ret.append(other.getComponent(i));
+        }
+        return ret;
     }
 
 }
