@@ -54,13 +54,11 @@ export abstract class AbstractName implements Name {
     abstract append(c: string): void;
     abstract remove(i: number): void;
 
-    public concat(other: Name): Name {
-        let ret = this.clone();
+    public concat(other: Name): void {
         let noComponents:number = other.getNoComponents();
         for (let i = 0; i < noComponents; i++) {
-            ret.append(other.getComponent(i));
+            this.append(other.getComponent(i));
         }
-        return ret;
     }
 
 }

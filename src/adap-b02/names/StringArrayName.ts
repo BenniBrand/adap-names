@@ -51,15 +51,15 @@ export class StringArrayName implements Name {
     }
 
     public setComponent(i: number, c: string): void {
-        this.components[i] = this.escapeComponents([c])[0];
+        this.components[i] = c;
     }
 
     public insert(i: number, c: string): void {
-       this.components.splice(i,0,this.escapeComponents([c])[0]);
+       this.components.splice(i,0,c);
     }
 
     public append(c: string): void {
-        this.components.push(this.escapeComponents([c])[0]);
+        this.components.push(c);
     }
 
     public remove(i: number): void {
