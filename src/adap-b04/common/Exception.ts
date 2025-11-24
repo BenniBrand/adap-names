@@ -25,3 +25,5 @@ export abstract class Exception extends Error {
     }
 
 }
+
+export type ExceptionConstructor = new (message: string) => Error;

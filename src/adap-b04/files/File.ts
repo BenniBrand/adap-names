@@ -1,6 +1,7 @@
 import { Node } from "./Node";
 import { Directory } from "./Directory";
 import { MethodFailedException } from "../common/MethodFailedException";
+import { IllegalArgumentException } from "../common/IllegalArgumentException";
 
 enum FileState {
     OPEN,
@@ -16,17 +17,36 @@ export class File extends Node {
         super(baseName, parent);
     }
 
-    public open(): void {
-        // do something
+public open(): void {
+        if (this.state === FileState.OPEN) {
+            throw new IllegalArgumentException("File is already open");
+        }
+
+        if (this.state === FileState.DELETED) {
+            throw new IllegalArgumentException("Cannot open a deleted file");
+        }
+
+        this.state = FileState.OPEN;
     }
 
     public read(noBytes: number): Int8Array {
-        // read something
-        return new Int8Array();
+
+        if (this.state !== FileState.OPEN) {
+            throw new IllegalArgumentException("File must be open to read");
+        }
+
+        if (noBytes < 0) {
+             throw new IllegalArgumentException("Byte count must be non negative");
+        }
+        return new Int8Array(noBytes);
     }
 
     public close(): void {
-        // do something
+        if (this.state !== FileState.OPEN) {
+             throw new IllegalArgumentException("Only an open file can be closed");
+        }
+
+        this.state = FileState.CLOSED;
     }
 
     protected doGetFileState(): FileState {
